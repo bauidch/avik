@@ -3,7 +3,7 @@ Description=uWSGI instance to serve MyApp
 After=network.target
 
 [Service]
-User=root
+User=nginx
 Group=nginx
 WorkingDirectory=/var/www/MyApp
 Environment="PATH=/var/www/MyApp/.env/bin"

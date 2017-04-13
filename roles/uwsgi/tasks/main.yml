@@ -11,7 +11,7 @@
   pip: name=virtualenv
 
 - name: Creates directory
-  file: path=/var/www/MyApp state=directory owner=nginx group=nginx
+  file: path=/var/www/MyApp state=directory mode=710 owner=nginx group=nginx
 
 - name: Creates directory
   file: path=/var/www/MyApp/.env state=directory owner=nginx group=nginx
@@ -31,20 +31,26 @@
 - name: Create Sock File
   file: path=/var/www/MyApp/myapp.sock state=touch owner=nginx group=nginx
 
+- name: Create Uwsgi Log dir
+  file: path=/var/log/uwsgi state=directory
+
+- name: Create Uwsgi Log File
+  file: path=/var/log/uwsgi/myapp.log state=touch
+
 - name: Copy files
   copy: src={{ item.src }} dest={{ item.dest }}
   with_items:
-    - { src: 'wsgi.py', dest: '/var/www/MyApp/wsgi.py' }
-    - { src: 'myapp.py', dest: '/var/www/MyApp/myapp.py' }
+    - { src: 'wsgi.py', dest: '/var/www/MyApp/wsgi.py', owner: 'nginx', group: 'nginx' }
+    - { src: 'myapp.py', dest: '/var/www/MyApp/myapp.py', owner: 'nginx', group: 'nginx' }
     - { src: 'gunicorn.conf', dest: '/etc/nginx/conf.d/gunicorn.conf' }
-    - { src: 'myapp.ini', dest: '/var/www/MyApp/myapp.ini' }
+    - { src: 'myapp.ini', dest: '/var/www/MyApp/myapp.ini', owner: 'nginx', group: 'nginx' }
     - { src: 'myapp.service', dest: '/etc/systemd/system/myapp.service' }
 
 - name: Reload Service Deamon
   command: systemctl daemon-reload
 
 - name: Start MyApp service
-  service: name=MyApp state=started enabled=yes
+  service: name=myapp state=started enabled=yes
 
 - name: Restart nginx
   service: name=nginx state=restarted enabled=yes

@@ -29,10 +29,5 @@
     - vim
     - nano
 
-- name: install needed trashtools
-  yum: state=latest name={{ item }}
-  with_items:
-    - cowsay
-    - sl
 
 
