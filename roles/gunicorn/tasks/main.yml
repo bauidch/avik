@@ -5,23 +5,41 @@
   with_items:
     - python-pip
     - python-devel
+    - gcc
 
 - name: install python package
-  pip: name={{ item }}
+  pip: name=virtualenv
+
+- name: Creates directory
+  file: path=/var/www/MyApp state=directory owner=nginx group=nginx
+
+- name: Creates directory
+  file: path=/var/www/MyApp/env state=directory owner=nginx group=nginx
+
+- name: Create the virtualenv
+  command: virtualenv /var/www/MyApp/env
+
+- name: pip Install packages into virtualenv
+  pip: name={{ item }} virtualenv="/var/www/MyApp/env"
   with_items:
-    - virtualenv
     - gunicorn
     - flask
 
-- name: Creates directory
-  file: path=/var/www/MyApp state=directory
-
-- name: Create the virtualenv
-  command: virtualenv -p /var/www/MyApp/
-           creates=/var/www/MyApp/bin/activate
-
 - name: Ensure gunicorn is installed
-  pip: virtualenv=/var/www/MyApp/ name=gunicorn  
+  pip: virtualenv=/var/www/MyApp/env name=gunicorn
 
+- name: Copy files
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: 'myapp.py', dest: '/var/www/MyApp/myapp.py' }
+    - { src: 'wsgi.py', dest: '/var/www/MyApp/wsgi.py' }
+    - { src: 'MyApp.service', dest: '/etc/systemd/system/MyApp.service' }
+    - { src: 'gunicorn.conf', dest: '/etc/nginx/conf.d/gunicorn.conf' }
+
+- name: Start MyApp service
+  service: name=MyApp state=started enabled=yes
+
+- name: restart nginx
+  service: name=nginx state=restarted enabled=yes
 
 
