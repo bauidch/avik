@@ -1,0 +1,7 @@
+---
+# defaults file for rbicker.nextcloud
+
+mysql_root_pw: secret
+database_mysql_db: nextcloud
+database_mysql_user: nextcloud
+database_mysql_pw: nextcloud

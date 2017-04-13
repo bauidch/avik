@@ -1,0 +1,35 @@
+---
+- name: Copy the NGINX repository definition
+  copy: src=nginx.repo dest=/etc/yum.repos.d/
+
+- name: Copy the EPEL repository definition
+  copy: src=epel.repo dest=/etc/yum.repos.d/
+
+- name: Copy the REMI repository definition
+  copy: src=remi.repo dest=/etc/yum.repos.d/
+
+- name: Stop Firewall
+  service: name=firewalld state=stopped
+
+- name: Remove Firewall sysmlink
+  service: name=firewalld enabled=no
+
+- name: install needed systools
+  yum: state=latest name={{ item }}
+  with_items:
+    - htop
+    - atop
+
+- name: install needed editors
+  yum: state=latest name={{ item }}
+  with_items:
+    - vim
+    - nano
+
+- name: install needed trashtools
+  yum: state=latest name={{ item }}
+  with_items:
+    - cowsay
+    - sl
+
+
