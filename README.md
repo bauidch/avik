@@ -6,5 +6,5 @@ My personal Ansible role and Playbook collection
 sudo ansible-playbook -i hosts site.yml -vvv
 ```
 ``` bash
-sudo ansible-playbook -i ./inventrory/hosts ./playbooks/database.yml 
+sudo ansible-playbook -i ./inventory/hosts ./playbooks/database.yml 
 ```
