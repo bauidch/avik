@@ -1,0 +1,11 @@
+---
+- name: Python App
+  hosts: vagrantbox
+  remote_user: vagrant
+  gather_facts: yes
+
+  roles:
+    - common
+    - motd
+    - nginx
+    - gunicorn
