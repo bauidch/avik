@@ -10,11 +10,20 @@
     - python-devel
     - mongodb-org
 
-- name: Install pyMongo
-  pip: name=pymongo
-
 - name: Start MongoDB Service
   service: name=mongod state=started enabled=yes
+
+- name: Install Pymongo
+  pip:  name=pymongo version=3.4
+
+- name: add the admin user
+  mongodb_user:
+    database: admin
+    name: admin
+    password: ${mongo_admin_pass}
+    roles: readWrite,dbAdmin,userAdmin,readWriteAnyDatabase
+    state: present
+  ignore_errors: yes
 
 - name: Create a new database and a user
   mongodb_user: login_user=admin login_password=${mongo_admin_pass} database=test user=admin password=${mongo_admin_pass} state=present
