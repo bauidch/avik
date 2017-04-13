@@ -29,7 +29,7 @@
   pip: virtualenv=/var/www/MyApp/.env name=uwsgi
 
 - name: Create Sock File
-  file: path=/var/www/MyApp/myapp.sock state=touch owner=nginx group=nginx
+  file: path=/var/run/myapp.sock state=touch
 
 - name: Create Uwsgi Log dir
   file: path=/var/log/uwsgi state=directory
