@@ -7,7 +7,7 @@ User=user
 Group=nginx
 WorkingDirectory=/var/www/MyApp
 Environment="PATH=/var/www/MyApp/env/bin"
-ExecStart=/var/www/MyApp/env/bin/gunicorn --workers 3 --bind unix:myapp.sock -m 007 wsgi
+ExecStart=/var/www/MyApp/env/bin/gunicorn --workers 3 --bind unix:/var/www/MyApp/myapp.sock -m 007 wsgi
 
 [Install]
 WantedBy=multi-user.target

@@ -8,4 +8,4 @@
     - common
     - motd
     - nginx
-    - gunicorn
+    - uwsgi
