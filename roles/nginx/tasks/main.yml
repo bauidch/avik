@@ -10,6 +10,6 @@
   service: name=nginx state=started enabled=yes
 
 - name: Copy index Template
-  template: src=index.html.j2 dest=/etc/share/nginx/html/index.html
+  template: src=index.html.j2 dest=/usr/share/nginx/html/index.html
 
 
