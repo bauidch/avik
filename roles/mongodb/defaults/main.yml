@@ -1,0 +1,7 @@
+---
+# defaults file for rbicker.nextcloud
+
+mongo_admin_pass: secret
+mongos_port: 8888
+mongoc_port: 7777
+mongos_chunk_size: 1
