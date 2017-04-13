@@ -14,8 +14,8 @@
 - name: Remove Firewall sysmlink
   service: name=firewalld enabled=no
 
-- name: upgrade all packages
-  yum: name=* state=latest
+#- name: upgrade all packages
+#  yum: name=* state=latest
 
 - name: install needed systools
   yum: state=latest name={{ item }}

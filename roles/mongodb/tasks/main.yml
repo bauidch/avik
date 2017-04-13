@@ -4,10 +4,17 @@
   copy: src=mongodb-org.repo dest=/etc/yum.repos.d/
 
 - name: Install MongoDB package
-  yum: name=mongodb-org state=installed
+  yum:  name={{ item }} state=latest
+  with_items:
+    - python-pip
+    - python-devel
+    - mongodb-org
+
+- name: Install pyMongo
+  pip: name=pymongo
 
 - name: Start MongoDB Service
   service: name=mongod state=started enabled=yes
 
 - name: Create a new database and a user
-  mongodb_user: login_user=admin login_password=${mongo_admin_pass} login_port=${mongos_port} database=test user=admin password=${mongo_admin_pass} state=present
+  mongodb_user: login_user=admin login_password=${mongo_admin_pass} database=test user=admin password=${mongo_admin_pass} state=present
