@@ -1,10 +1,10 @@
 ---
 # Handler to handle DB tier notifications
-- name: reload mariadb
+- name: reload mongod
   service:
     name: mariadb
     state: reloaded
 
 
-- name: restart mariadb
-  service: name=mariadb state=restarted
+- name: restart mongod
+  service: name=mongod state=restarted
