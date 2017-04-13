@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve MyApp
+After=network.target
+
+[Service]
+User=root
+Group=nginx
+WorkingDirectory=/var/www/MyApp
+Environment="PATH=/var/www/MyApp/.env/bin"
+ExecStart=/var/www/MyApp/.env/bin/uwsgi --ini myapp.ini
+
+[Install]
+WantedBy=multi-user.target

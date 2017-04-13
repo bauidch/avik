@@ -5,9 +5,7 @@
   with_items:
     - python-pip
     - python-devel
-    - build-essential
-    - uwsgi
-    - uwsgi-plugin-python
+    - gcc
 
 - name: install python package
   pip: name=virtualenv
@@ -21,32 +19,37 @@
 - name: Create the virtualenv
   command: virtualenv /var/www/MyApp/.env
 
-- name: pip Install packages into virtualenv
+- name: Install python packages into virtualenv
   pip: name={{ item }} virtualenv="/var/www/MyApp/.env"
   with_items:
+    - uwsgi
     - flask
 
-- name: Ensure gunicorn is installed
-  pip: virtualenv=/var/www/MyApp/env name=flask
+- name: Ensure uwsgi is installed
+  pip: virtualenv=/var/www/MyApp/.env name=uwsgi
 
 - name: Create Sock File
-  file: path=/tmp/myapp.sock owner=nginx group=nginx
+  file: path=/var/www/MyApp/myapp.sock state=touch owner=nginx group=nginx
 
 - name: Copy files
   copy: src={{ item.src }} dest={{ item.dest }}
   with_items:
+    - { src: 'wsgi.py', dest: '/var/www/MyApp/wsgi.py' }
     - { src: 'myapp.py', dest: '/var/www/MyApp/myapp.py' }
     - { src: 'gunicorn.conf', dest: '/etc/nginx/conf.d/gunicorn.conf' }
-    - { src: 'myapp.ini', dest: '/etc/uwsgi/apps-available/myapp.ini' }
+    - { src: 'myapp.ini', dest: '/var/www/MyApp/myapp.ini' }
+    - { src: 'myapp.service', dest: '/etc/systemd/system/myapp.service' }
 
-- name: Enable App Link
-  command: ln -s /etc/uwsgi/apps-available/myapp.ini /etc/uwsgi/apps-enabled/myapp.ini
+- name: Reload Service Deamon
+  command: systemctl daemon-reload
+
+- name: Start MyApp service
+  service: name=MyApp state=started enabled=yes
 
 - name: Restart nginx
   service: name=nginx state=restarted enabled=yes
 
-- name: Restart uwsgi service
-  service: name=uwsgi state=restarted enabled=yes
+
 
 
 
