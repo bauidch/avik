@@ -10,9 +10,8 @@
   become: true
   register: dokku
 
-- name: "Start Install Script"
+- name: "Remove Bootstrap.sh"
   command: "sudo rm /tmp/bootstrap.sh"
-  when: dokku|sucesfull
 
 
 - name: "Configure dokku vhost"
