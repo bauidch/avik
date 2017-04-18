@@ -1,0 +1,4 @@
+---
+
+dokku_version: "0.9.4"
+dokku_vhost: "myapp.com"
