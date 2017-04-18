@@ -1,9 +1,19 @@
 ---
 
 - name: "Install dokku"
-  shell: "wget -qO- https://raw.github.com/progrium/dokku/v{{ dokku_version }}/bootstrap.sh | sudo DOKKU_TAG=v{{ dokku_version }} bash"
-  args:
-    creates: /var/lib/dokku
+  get_url:
+      url: https://raw.githubusercontent.com/dokku/dokku/v{{ dokku_version }}/bootstrap.sh
+      dest: /tmp/bootstrap.sh
+
+- name: "Start Install Script"
+  shell: "sudo DOKKU_TAG=v{{ dokku_version }} bash /tmp/bootstrap.sh"
+  become: true
+  register: dokku
+
+- name: "Start Install Script"
+  command: "sudo rm /tmp/bootstrap.sh"
+  when: dokku|sucesfull
+
 
 - name: "Configure dokku vhost"
   copy: dest=/home/dokku/VHOST content={{ dokku_vhost }}

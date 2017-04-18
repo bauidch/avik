@@ -22,6 +22,8 @@
   with_items:
     - htop
     - atop
+    - wget
+    - curl
 
 - name: install needed editors
   yum: state=latest name={{ item }}
