@@ -42,7 +42,7 @@
   with_items:
     - { src: 'wsgi.py', dest: '/var/www/MyApp/wsgi.py', owner: 'nginx', group: 'nginx' }
     - { src: 'myapp.py', dest: '/var/www/MyApp/myapp.py', owner: 'nginx', group: 'nginx' }
-    - { src: 'gunicorn.conf', dest: '/etc/nginx/conf.d/gunicorn.conf' }
+    - { src: 'myapp.conf', dest: '/etc/nginx/conf.d/myapp.conf' }
     - { src: 'myapp.ini', dest: '/var/www/MyApp/myapp.ini', owner: 'nginx', group: 'nginx' }
     - { src: 'myapp.service', dest: '/etc/systemd/system/myapp.service' }
 

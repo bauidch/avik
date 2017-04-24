@@ -1,0 +1,68 @@
+---
+- name: Copy the Passenger repository definition
+  copy: src=passenger.repo dest=/etc/yum.repos.d/
+
+- name: install python
+  yum: state=latest name={{ item }}
+  with_items:
+    - python
+    - python-pip
+    - python-devel
+    - gcc
+    - pygpgme
+
+- name: install Passenger
+  shell: yum install -y nginx passenger || sudo yum-config-manager --enable cr && sudo yum install -y nginx passenger
+
+#- name: install Passenger
+#  yum: state=latest name=passenger
+
+- name: Copy Passenger Conf
+  copy: src=passenger.conf dest=/etc/nginx/conf.d/passenger.conf
+
+- name: Restart nginx
+  service: name=nginx state=restarted enabled=yes
+
+- name: Check Passenger installation
+  shell: /usr/bin/passenger-config validate-install
+
+- name: Add App user
+  user:
+    name: myappuser
+    comment: "MyApp User"
+
+- name: Create User SSH dir
+  file: path=~myappuser/.ssh state=directory owner='myappuser' mode='700'
+
+#- name: Make SSH key file
+#  shell: touch $HOME/.ssh/authorized_keys
+
+#- name: Grap SSH key
+#  shell: sh -c "cat $HOME/.ssh/authorized_keys >> ~myappuser/.ssh/authorized_keys"
+
+#- name: Chmod SSH dir Part 2
+#  shell: sh -c "chmod 600 ~myappuser/.ssh/*"
+
+- name: Make MyApp Dir
+  file: path=/var/www/myapp state=directory owner='myappuser'
+
+- name: Copy MyApp files
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: 'myapp.py', dest: '/var/www/myapp/myapp.py'}
+    - { src: 'passenger_wsgi.py', dest: '/var/www/myapp/passenger_wsgi.py'}
+
+- name: Install python packages
+  pip: name={{ item }}
+  with_items:
+    - flask
+    - pymongo
+
+- name: Copy MyApp Conf
+  copy: src=myapp.conf dest=/etc/nginx/conf.d/myapp.conf
+
+- name: Restart nginx
+  service: name=nginx state=restarted enabled=yes
+
+
+
