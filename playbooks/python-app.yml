@@ -8,4 +8,5 @@
     - common
     - motd
     - nginx
-    - uwsgi
+    - mongodb
+    - passenger
