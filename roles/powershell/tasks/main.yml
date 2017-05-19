@@ -1,0 +1,12 @@
+---
+- name: Copy the NGINX repository definition
+  copy: src=microsoft.repo dest=/etc/yum.repos.d/
+
+- name: install powershell
+  yum: state=latest name=powershell
+
+- name: install tools
+  yum: state=latest name={{ item }}
+  with_items:
+    - unzip
+    - openssl-devel
