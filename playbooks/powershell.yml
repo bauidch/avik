@@ -1,0 +1,9 @@
+---
+- name: Powershell
+  hosts: vagrantbox
+  remote_user: vagrant
+  gather_facts: yes
+
+  roles:
+    - common
+    - powershell

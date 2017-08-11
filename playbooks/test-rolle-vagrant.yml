@@ -1,0 +1,6 @@
+---
+- hosts: baubox
+  become: true
+  roles:
+    - { role: common }
+    - { role: '{{test_role}}' }

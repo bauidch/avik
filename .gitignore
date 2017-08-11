@@ -2,7 +2,7 @@
 
 ### Ansible ###
 # Ansible retry files
-*.retry
+playbooks/passenger.retry
 
 inventory/hosts
 
